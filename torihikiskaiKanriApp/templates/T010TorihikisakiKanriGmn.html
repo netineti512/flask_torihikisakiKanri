@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title> 取引先管理システム 取引先管理画面(T010)</title>
+
+        <style>
+
+        </style>
+
+    </head>
+
+    <body>
+        <script>
+            function confirmMsg(msg, btnId) {
+                if(confirm(msg) == true) {
+                    document.getElementById(btnId).value = "True";
+                }
+                else { 
+                    document.getElementById(btnId).value = "False";
+                }
+            }
+
+            function setValue(btnId) {
+                document.getElementById(btnId).value = "True";
+            }
+
+            function setSelectedRow(btnId) {
+                var row = 0
+                if (document.T010TorihikisakiForm.T010RadioArr.length == undefined) {
+                    row += 1
+                } else {
+                    for(var i=0; i<document.T010TorihikisakiForm.T010RadioArr.length;i++){
+                        if(document.T010TorihikisakiForm.T010RadioArr[i].checked){  
+                            row = i+1
+                        }
+                    }
+                }
+
+                var tbl = document.getElementById('T010TorihikisakiTable');
+
+                document.getElementById('T010SelectedRow').value = tbl.rows[row].cells[1].innerText
+                document.getElementById(btnId).disabled = false;
+            }
+
+
+
+
+
+            function checkCSVFile() {
+                if(document.getElementById("importFile").value != "") {
+                    const button = document.getElementById("importButton");
+                    button.disabled = false
+                    document.getElementById("hiddenImportFile").value = document.getElementById("importFile").value
+                }
+            }
+
+            function downloadCsvFormat() {
+                const link = document.createElement('a')
+                link.download = 'TTorhikiTableImportFormat.csv'
+                link.href = './app/templates/doc/'
+                link.click()
+
+                const button = document.getElementById("formatDonload");
+                button.disabled = true
+            }
+
+            function download() {
+                alert(document.getElementById("downloadUrl").value)
+                const link = document.createElement('a')
+                link.download = document.getElementById("downloadUrl").value
+                link.href = './doc/'
+                link.click()
+            }
+        </script>
+
+        <div style="text-align: center">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}" style="color:red">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <h1 style="background-color:#c71585">取引先管理システム</h1>
+            <h2 style="background-color:#c71585">T010 取引先管理画面</h2>
+
+            <form action="/back" method="POST">
+                <button type="submit" id="T010BackBtn" name="T010BackBtn" value='False' onclick="confirmMsg('ログイン画面に戻りますか？', 'T010BackBtn');">戻る</button>
+            </form>
+            <br>
+
+            <form action="/moveM012KanrishaPageGmn" method="POST">
+                <button type="submit" id="T010KanriBtn" name="T010KanriBtn" value='False' onclick="setValue('T010KanriBtn');">管理者ページ</button>
+            </form>
+            <br>
+        </div><br>
+        
+        <div style="width: 1300px; height: {{height}}px; margin: 5px; padding: 20px; border: solid 1px #999999; ">
+
+            <div style="width: 700px; height: 30px; position: relative; top: 0px; left: 0px; margin: 5px; padding: 20px; border: solid 1px #999999;">
+
+                <form action="/serachTorihikisakiInfo" method="POST">
+                    <label for="T010LabelToriCd">取引先コード：</label> &nbsp;
+                    <input type="text" id="T010ToriCd" name="T010ToriCd" value={{T010ToriCd}}> &nbsp; &nbsp;
+
+                    <label for="T010LabelToriNm">取引先名称：</label> &nbsp;
+                    <input type="text" id="T010ToriNm" name="T010ToriNm" value={{T010ToriNm}}>
+                    </br>
+
+                    <div style="position: relative; top: -25px; left: 625px;">
+                        <button type="submit" id="T010SearchBtn" name="T010SearchBtn" value="False">検索</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div style="width: 50px; height: 10px; margin: 5px; padding: 20px; border: solid 1px #999999;">
+                <div style="text-align: center; position: relative; top: -5px; left: 0px;">
+                    <form action="/editTorihikisakiInfo" method="POST">
+                        <input readonly type="hidden" id="T010SelectedRow" name="T010SelectedRow" value="">
+                        <button disabled type="submit" id="T010EditButton" name="T010EditButton" value="True">編集</button>
+                    </form>
+                </div>
+            </div>
+
+            <div style="width: 250px; height : 10px; position: relative; top: -57px; left: 100px; margin: 5px; padding: 20px; border: solid 1px #999999;">
+                <div style="text-align: center">
+                    <div style="position: relative; top: -18px; left: -60px;">
+                        <button disabled type="submit" id="T010FormatDownload" name="T010FormatDownload" onclick="downloadCsvFormat();">フォーマットダウンロード</button>
+                    </div>
+
+                    <form action="/importTorihikisakiInfo" method="POST">
+                        <div style="position: relative; top: -20px; left: -10px;">
+                            <input disabled type="file" accept=".csv" id="T010ImportFile" name="T010ImportFile" onchange="checkCSVFile()">
+                        </div>
+                        <div style="position: relative; top: -55px; left: 80px;">
+                            <button disabled type="submit" id="T010ImportButton" name="T010ImportButton" value="False" onclick="setValue('T010ImportButton');">取込</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div style="width: 100px; height: 10px; position: relative; top: -113.5px; left: 400px; margin: 5px; padding: 20px; border: solid 1px #999999;">
+                <div style="text-align: center">
+                    <form action="/exportTorihikisakiInfo" method="POST">
+                        <div style="position: relative; top: -18px; left: 0px;">
+                            <button disabled type="submit" id="T010ExportButton" name="T010ExportButton">出力</button>
+                        </div>
+                        <div style="position: relative; top: -20px; left: 0px;">
+                            <button disabled type="submit" id="T010DownloadButton" name="T010DownloadButton" onclick="download();">ダウンロード</button>
+                        </div>
+                        <input type="hidden" id="T010DownloadUrl" name="T010DownloadUrl" value={{fileName}}>
+                    </form>
+                </div>
+            </div>
+
+            <div style="width: 742.5px; height: 600px; position: relative; top: -110px; left: 5px;">
+                <form name="T010TorihikisakiForm">
+                    <table id="T010TorihikisakiTable" name="T010TorihikisakiTable" width="100%" border="1">
+                        <thead>
+                            <tr>
+                                <th align="center">選択</th>
+                                <th align="center">取引先コード</th>
+                                <th align="center">取引先名称</th>
+                                <th align="center">取引先区分</th>
+                                <th align="center">内外区分</th>
+                                <th align="center">取引開始日</th>
+                                <th align="center">取引終了日</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for toriCd, toriNm, toriKbn, naigaiKbn, toriStartDate, toriEndDate in data %}
+                            <tr>
+                                <td align="center"><input type="radio" id="T010RadioArr" name="T010RadioArr" onClick="setSelectedRow('T010EditButton');"/></td>
+                                <td align="center"><label for="T010ToriCd">{{ toriCd }}</label></td>
+                                <td align="center"><label for="T010ToriNm">{{ toriNm }}</label></td>
+                                <td align="center"><label for="T010ToriKbn">
+                                    {% if toriKbn == 0 %}
+                                        a社
+                                    {% else %}
+                                        z社
+                                    {% endif %}
+                                </label></td>
+                                <td align="center"><label for="T010NaigaiKbn">
+                                    {% if naigaiKbn == 0 %}
+                                        国内
+                                    {% else %}
+                                        国外
+                                    {% endif %}
+                                </label></td>
+                                <td align="center"><label for="T010ToriStartDate">{{ toriStartDate }}</label></td>
+                                <td align="center"><label for="T010ToriEndDate">{{ toriEndDate }}</label></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title> 取引先管理システム 取引先編集画面(T011)</title>
+
+        <style>
+
+        </style>
+
+    </head>
+
+    <body>
+        <script>
+            function confirmMsg(msg, btnId) {
+                if(confirm(msg) == true) {
+                    document.getElementById(btnId).value = "True";
+                }
+                else { 
+                    document.getElementById(btnId).value = "False";
+                }
+            }
+
+            function setValue(btnId) {
+                document.getElementById(btnId).value = "True";
+            }
+        </script>
+
+        <div style="text-align: center">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}" style="color:red">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <h1 style="background-color:#00bfff">取引先管理システム</h1>
+            <h2 style="background-color:#00bfff">T011 取引先編集画面</h2>
+
+            <form action="/back" method="POST">
+                <button type="submit" id="T011BackBtn" name="T011BackBtn" value='False' onclick="confirmMsg('取引先管理画面に戻りますか？', 'T011BackBtn');">戻る</button>
+            </form>
+            <br>
+        </div>
+        
+        <div style="width: 500px; height : 500px; margin: 5px; padding: 20px; border: solid 1px #999999; margin: auto;">
+
+            <form action="/updateTorihikisakiInfo" method="POST">
+                <div style="text-align: center">
+                    <button type="submit" id="T011UpdateBtn" name="T011UpdateBtn" value="False" onclick="confirmMsg('取引先情報を更新しますか？', 'T011UpdateBtn');">取引先情報更新</button>
+                    </br><br>
+                
+                    <label for="T011LabelToriCd">・取引先コード：</label>
+                    <input readonly type="text" id="T011ToriCd" name="T011ToriCd" value={{dictTorihikisakiInfo["toriCd"]}}>
+                    </br>
+                    <label for="T011LabelToriNm">・取引先名称　：</label>
+                    <input type="text" id="T011ToriNm" name="T011ToriNm" value={{dictTorihikisakiInfo["toriNm"]}}>
+                    </br>
+                    <label for="T011LabelToriKana">・取引先仮名　：</label>
+                    <input type="text" id="T011ToriKana" name="T011ToriKana" value={{dictTorihikisakiInfo["toriKana"]}}>
+                    </br>
+                    <label for="T011LabelToriKbn">・取引先区分　：　　　　　　</label>
+                    <select id="T011ToriKbn" name="T011ToriKbn">
+                    {% if dictTorihikisakiInfo["toriKbn"] == '0' %}
+                        <option value="0">a社</option>
+                        <option value="1">z社</option>
+                    {% else %}
+                        <option value="1">z社</option>
+                        <option value="0">a社</option>
+                    {% endif %}
+                    </select>
+                    </br>
+                    <label for="T011LabelToriTel">・取引先番号　：</label>
+                    <input type="text" id="T011ToriTel" name="T011ToriTel" value={{dictTorihikisakiInfo["toriTel"]}}>
+                    </br>
+                    <label for="T011LabelToriShohin">・取引商品　　：</label>
+                    <input type="text" id="T011ToriShohin" name="T011ToriShohin" value={{dictTorihikisakiInfo["toriShohin"]}}>
+                    </br>
+                    <label for="T011LabelNaigaiKbn">・国内外区分　：　　　　　　</label>
+                    <select id="T011NaigaiKbn" name="T011NaigaiKbn">
+                    {% if dictTorihikisakiInfo["naigaiKbn"] == 0 %}
+                        <option value="0">国内</option>
+                        <option value="1">国外</option>
+                    {% else %}
+                        <option value="1">国外</option>
+                        <option value="0">国内</option>
+                    {% endif %}
+                    </select>
+                    </br>
+                    <label for="T011LabelZipCode">・郵便番号　　：</label>
+                    <input type="text" id="T011ZipCode" name="T011ZipCode" value={{dictTorihikisakiInfo["zipCode"]}}>
+                    </br>
+                    <label for="T011LabelAdd1">・住所１　　　：</label>
+                    <input type="text" id="T011Add1" name="T011Add1" value={{dictTorihikisakiInfo["add1"]}}>
+                    </br>
+                    <label for="T011LabelAdd2">・住所２　　　：</label>
+                    <input type="text" id="T011Add2" name="T011Add2" value={{dictTorihikisakiInfo["add2"]}}>
+                    </br>
+                    <label for="T011LabelTantoBusho">・担当部署　　：</label>
+                    <input type="text" id="T011Tantobusho" name="T011Tantobusho" value={{dictTorihikisakiInfo["tantoBusho"]}}>
+                    </br>
+                    <label for="T011LabelTantosha">・担当者　　　：</label>
+                    <input type="text" id="T011Tantosha" name="T011Tantosha" value={{dictTorihikisakiInfo["tantosha"]}}>
+                    </br>
+                    <label for="T011LabelTantoBushoTel">・担当部署番号：</label>
+                    <input type="text" id="T011TantoBushoTel" name="T011TantoBushoTel" value={{dictTorihikisakiInfo["tantoBushoTel"]}}>
+                    </br>
+                    <label for="T011LabelPayJoken">・支払条件　　：　　　　</label>
+                    <select id="T011PayJoken" name="T011PayJoken">
+                    {% if dictTorihikisakiInfo["payJoken"] == 0 %}
+                        <option value="0">現金</option>
+                        <option value="1">クレジット</option>
+                    {% else %}
+                        <option value="1">クレジット</option>
+                        <option value="0">現金</option>
+                    {% endif %}
+                    </select>
+                    </br>
+                    <label for="T011LabelDepoJoken">・入金条件　　：　　　　</label>
+                    <select id="T011DepoJoken" name="T011DepoJoken">
+                    {% if dictTorihikisakiInfo["depoJoken"] == 0 %}
+                        <option value="0">現金</option>
+                        <option value="1">クレジット</option>
+                    {% else %}
+                        <option value="1">クレジット</option>
+                        <option value="0">現金</option>
+                    {% endif %}
+                    </select>
+                    </br>
+                    <label for="T011LabelToriStartDate">・取引開始日　：</label>
+                    <input type="text" id="T011ToriStartDate" name="T011ToriStartDate" value={{dictTorihikisakiInfo["toriStartDate"]}}>
+                    </br>
+                    <label for="T011LabelToriEndDate">・取引終了日　：</label>
+                    <input type="text" id="T011ToriEndDate" name="T011ToriEndDate" value={{dictTorihikisakiInfo["toriEndDate"]}}>
+                    </br>
+                    <label for="T011LabelMemo">・メモ　　　　：</label>
+                    <input type="text" id="T011Memo" name="T011Memo" value={{dictTorihikisakiInfo["memo"]}}>
+                    </br>
+                </div>
+                <br>
+                
+            </form>
+
+        </div>
+
+        <br>
+        <div style="text-align: center">
+            <form action="/deleteTorihikisakiInfo" method="POST">
+                <button type="submit" id="T011DeleteBtn" name="T011DeleteBtn" value="False" onclick="confirmMsg('取引先情報を削除しますか？', 'T011DeleteBtn');">取引先情報削除</button>
+                <input type="hidden" id="T011HiddenToriCd" name="T011HiddenToriCd" value={{T011SelectedRow}}>
+            </form>
+        </div>
+
+    </body>
+</html>

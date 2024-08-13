@@ -1,0 +1,5 @@
+09:48:53.912686：SELECT * FROM MUser WHERE shainCd = 'admin' AND password = 'admin' AND deleteFlg = '0'
+09:48:55.414989：SELECT * FROM TTorihiki WHERE deleteFlg = '0'
+09:49:06.564613：SELECT * FROM TTorihiki WHERE toriCd = '0002' AND deleteFlg = '0'
+09:50:32.319857：SELECT * FROM MUser WHERE shainCd = 'admin' AND password = 'admin' AND deleteFlg = '0'
+09:50:34.517299：SELECT * FROM TTorihiki WHERE deleteFlg = '0'

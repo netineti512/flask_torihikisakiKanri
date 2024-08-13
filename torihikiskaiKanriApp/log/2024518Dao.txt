@@ -1,0 +1,1 @@
+14:52:27.288459：SELECT COUNT(*) FROM MUser WHERE shainCd = 'admin' AND password = 'admin' AND deleteFlg = '0'
