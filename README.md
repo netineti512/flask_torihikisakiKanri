@@ -11,5 +11,6 @@ Package      Version
 ------------ -------
 Flask        3.0.3
 
-cd 
+$ cd torihikiskaiKanriApp
+$ python app.py
 ```
